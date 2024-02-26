@@ -22,8 +22,8 @@ class Bola{
         this.dirx=(Math.random()*10)>5?1:-1
         this.diry=(Math.random()*10)>5?1:-1
         this.palco = palco
-        this.arrayBolas = bolas
-        this.id = Date.now()+"_"+Math.floor(Math.random)*100000000000000
+        this.arrayBolas = arrayBolas
+        this.id = Date.now()+"_"+Math.floor(Math.random()*100000000000)
         this.desenhar()
         this.controle=setInterval(this.controlar,10)
         this.eu = document.getElementById(this.id)
@@ -48,34 +48,46 @@ class Bola{
           const Div = document.createElement("div")
           Div.setAttribute("id",this.id)
           Div.setAttribute("classe","bola")
-          Div.setAttribute("style",`left:${this.px};top:${this.py};width:${this.tam};height:${this.tam};background-color:rgb${this.r},${this.g},${this.b}`)
-          this.palco.appendchild(Div)
+          Div.setAttribute("style",`left:${this.px}px;top:${this.py}px;width:${this.tam}px;height:${this.tam}px;background-color:rgb${this.r},${this.g},${this.b}`)
+          this.palco.appendChild(Div)
        } 
        controle_bordas=()=>{
-
+        if(this.px+this.tam >= larguraPalco){
+         this.dirx = -1
+        }else if(this.px <= 0){
+         this.dirx=1
+        }
+        if(this.py+this.tam >= larguraPalco){
+         this.diry = -1
+        }else if(this.py <= 0){
+         this.diry=1
+        }
        }
        controlar=()=>{
-        controle_bordas()
+        this.controle_bordas()
         this.px += this.dirx*this.velx
         this.py += this.diry*this.vely
-        this.eu.setAttribute(("style",`left:${this.px};top:${this.py};width:${this.tam};height:${this.tam};background-color:rgb${this.r},${this.g},${this.b}`))
+        this.eu.setAttribute("style",`left:${this.px}px;top:${this.py}px;width:${this.tam}px;height:${this.tam}px;background-color:rgb${this.r},${this.g},${this.b}`)
+        if((this.px > larguraPalco) || (this.py > alturaPalco)){
+         this.removerBolas()
+        }
        }
-}
+      }
 
 window.addEventListener("resize",(evt)=>{
     larguraPalco = palco.offsetWidth
     alturaPalco = palco.offsetHeight
-    console.log(larguraPalco)
+
   
 })
 botaoAdicionar.addEventListener("click",(evt)=>{
   const quantidadeBola = txtBolas.value
   for(let i = 0; i < quantidadeBola; i++){
-
-  }
+  bolas.push(new Bola(bolas, palco))
+}
 })
 botaoRemover.addEventListener("click",(evt)=>{
-   bolas.map((upu)=>{
-
+   bolas.map((b)=>{
+  b.removerBolas()
    })
 })
